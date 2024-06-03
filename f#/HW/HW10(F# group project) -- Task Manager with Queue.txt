@@ -1,0 +1,60 @@
+//----Step 1: generate a list of random numbers. Write function that creates a list with jobCount numbers in it. ----
+//make list of randm integers 1-10
+let rec create_job_list jobCount resultLis =
+  let randn = System.Random().Next(1,10)
+  match jobCount with
+  | 0 -> resultLis // once jobcount reach 0, return list
+  | _ -> create_job_list (jobCount - 1) (randn::resultLis) //recursive call, and decrement jobCount by 1 and concatenate random num to  resultLis
+
+//testing
+let l1 = create_job_list 8 []
+printfn "%A" l1
+
+
+//---Step2: Implement a Queue type that has enqueue and dequeue functions
+//name a queue using two lists
+type 'a Queue = Queue of 'a list * 'a list
+let emptyQueue = Queue([], [])
+//enqueue: add to end of q() (add to in )
+let enqueue q e =
+  match q with
+  |Queue(fs, bs) -> Queue(e :: fs, bs)
+//test enque---------
+//let newq = enqueue emptyQueue 10
+//printfn "new q after enq:%A" newq
+
+//dequeue
+let dequeue q = 
+    match q with
+    | Queue([], []) -> None
+    | Queue(fs, b :: bs) -> Some(b, Queue(fs, bs))
+    | Queue(fs, []) -> 
+        let bs = List.rev fs
+        Some (bs.Head, Queue([], bs.Tail))
+
+//testing dequeue--------
+//let q2 = dequeue newq
+//printfn"%A" q2
+
+//step3
+let rec jobqueue queue tasks=
+  match tasks with
+  |[]-> queue
+  |head::tail -> 
+    if head%2=1 then
+      let newQ = enqueue queue head
+      printfn "Added task No.%d into the job queue" head
+      jobqueue newQ tail
+    else
+      match dequeue queue with
+      |None->
+        printfn "No more jobs to do right now."
+        jobqueue queue tail
+      |Some(item, newQ)->
+        printfn "Do job No.%d now" item
+        jobqueue newQ tail
+
+
+let finalq = jobqueue emptyQueue l1
+
+printfn "Final %A" finalq

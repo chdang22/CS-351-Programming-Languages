@@ -1,0 +1,78 @@
+
+(*
+Please write a function which can compare whether 2 input lists are equal
+to each other using F# tail recursion. You need to include both the
+function
+definition, a few test cases, and use AssertEquality to test if your
+function can process the test cases correctly. Though F# allows direct
+list comparison
+with =, in this HW, you need to use tail recursion to go over the list
+items
+one by one by yourself to practice the technique.
+Here are a few testing cases that you can use:
+[] and [] are equal to each other and return true
+[1;2] and [1;2;3] are not equal
+[2;1;3] and [2;1;4] are not equal
+[2;1;3;4] and [2;1;3;4] are equal
+[3;4] and [3] are not equal
+Count as 2pt HW.
+*)
+let AssertEquality inputTuple =
+  match inputTuple with
+  | (a,b) when a=b -> printfn "Test Success! :)"
+  | (a,b) -> printfn "Test Fail :("
+
+let rec compare_lists lis1 lis2 =
+  match lis1, lis2 with
+  | [],[] -> true
+  | head1::tail1 , head2::tail2 when head1=head2 -> compare_lists tail1 tail2
+  |_->false
+
+let A = [1;2;3]
+let B = [1..3]
+let C = [1]
+let D = A|> List.rev
+let E = [1;2;4]
+let F = [2;1;3;4]
+let G = [2;1;3;4]
+let H = []
+let I = []
+
+let resAB = compare_lists A B
+let resAC = compare_lists A C
+let resAD = compare_lists A D
+let resAE = compare_lists A E
+let resFG = compare_lists F G
+let resHI = compare_lists H I
+let resAI = compare_lists A I
+printfn "List A: %A" A
+printfn "List B: %A" B
+printfn "List C: %A" C
+printfn "List D: %A" D
+printfn "List E: %A" E
+printfn "List F: %A" F
+printfn "List G: %A" G
+printfn "List H: %A" H
+printfn "List I: %A" I
+
+printfn "A = B is %b" resAB
+AssertEquality (A,B)
+
+printfn "A = C is %b" resAC
+AssertEquality (A,C)
+
+printfn "A = D is %b" resAD
+AssertEquality (A,D)
+
+printfn "A = E is %b" resAE
+AssertEquality (A,E)
+
+printfn "F = G is %b" resFG
+AssertEquality (F,G)
+
+printfn "H = I is %b" resHI
+AssertEquality (H,I)
+
+printfn "A = I is %b" resAI
+AssertEquality (A,I)
+
